@@ -13,7 +13,7 @@
   :root {
     --cor-fundo: #121212;
     --cor-menu: #212121;
-    --sombra-clara: #333333; /* Ajustado para sombra mais escura */
+    --sombra-clara: #333333;
     --sombra-escura: #000000;
     --cor-texto: #ffffff;
     --cor-primaria: #7C5CFC;
@@ -27,8 +27,8 @@
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
-    justify-content: center; /* Centraliza o conteúdo verticalmente */
-    align-items: center; /* Centraliza o conteúdo horizontalmente */
+    justify-content: center;
+    align-items: center;
   }
   h2, h3, p {
     margin-bottom: 0.5rem;
@@ -44,10 +44,10 @@
     background: var(--cor-fundo);
     transition: left 0.3s ease-in-out;
     overflow-y: auto;
-    display: flex; /* Adicionado para centralizar conteúdo */
-    flex-direction: column; /* Adicionado para centralizar conteúdo */
-    align-items: center; /* Adicionado para centralizar conteúdo */
-    justify-content: center; /* Adicionado para centralizar conteúdo */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
   .screen.active {
     left: 0;
@@ -56,46 +56,42 @@
     font-size: 2.5rem;
     margin-bottom: 1rem;
     text-align: center;
-    color: var(--cor-texto); /* Garante cor do título */
+    color: var(--cor-texto);
   }
   .card {
     background: var(--cor-menu);
     border-radius: 16px;
-    padding: 2rem; /* Aumentei o padding para um visual mais espaçoso */
+    padding: 2rem;
     margin: 1rem auto;
     max-width: 400px;
     width: 90%;
     text-align: center;
-    box-shadow: -10px -10px 20px var(--sombra-clara), 10px 10px 20px var(--sombra-escura); /* Ajustado para neumorphism mais pronunciado */
+    box-shadow: -10px -10px 20px var(--sombra-clara), 10px 10px 20px var(--sombra-escura);
   }
-  /* Estilos específicos para os inputs DENTRO do card de login */
   .card input[type="email"],
   .card input[type="password"] {
     display: block;
     width: 100%;
-    padding: 1rem 1.5rem; /* Aumentei o padding para serem mais 'gordinhos' */
+    padding: 1rem 1.5rem;
     margin-bottom: 1rem;
     border-radius: 12px;
     border: none;
     font-size: 1rem;
-    background: var(--cor-menu); /* Fundo igual ao card para um visual 'escavado' */
+    background: var(--cor-menu);
     color: var(--cor-texto);
     text-align: left;
-    /* Sombra para efeito de 'depressão' */
     box-shadow: inset 5px 5px 10px var(--sombra-escura), inset -5px -5px 10px var(--sombra-clara);
-    outline: none; /* Remove a borda de foco padrão */
+    outline: none;
   }
   .card input[type="email"]::placeholder,
   .card input[type="password"]::placeholder {
-    color: #888; /* Cor do placeholder mais suave */
+    color: #888;
   }
-
-  /* Estilos para todos os botões, incluindo os de login/cadastro e sociais */
   .btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 1rem 1.5rem; /* Padding maior para os botões */
+    padding: 1rem 1.5rem;
     margin-bottom: 1rem;
     border-radius: 12px;
     border: none;
@@ -103,53 +99,46 @@
     font-size: 1rem;
     cursor: pointer;
     transition: all 0.2s ease;
-    /* Sombra para efeito de 'elevação' */
     box-shadow: 7px 7px 15px var(--sombra-escura), -7px -7px 15px var(--sombra-clara);
     color: var(--cor-texto);
     background: var(--cor-menu);
     outline: none;
   }
   .btn:last-child {
-    margin-bottom: 0; /* Remove margem do último botão */
+    margin-bottom: 0;
   }
-
   .btn-primary {
-    background: var(--cor-primaria); /* Botão Entrar */
+    background: var(--cor-primaria);
     color: #fff;
     font-weight: bold;
-    box-shadow: 5px 5px 10px var(--sombra-escura), -5px -5px 10px var(--cor-primaria); /* Sombra colorida */
+    box-shadow: 5px 5px 10px var(--sombra-escura), -5px -5px 10px var(--cor-primaria);
   }
-  /* Botão Criar Conta - usando cor do texto para fundo escuro */
   .btn-signup {
-    background: #333; /* Fundo mais escuro */
-    color: #ccc; /* Texto mais claro */
+    background: #333;
+    color: #ccc;
   }
   .btn-google {
-    background: #fff; /* Fundo branco para Google */
-    color: #000; /* Texto preto para Google */
+    background: #fff;
+    color: #000;
     font-weight: bold;
-    box-shadow: 5px 5px 10px var(--sombra-escura), -5px -5px 10px #ccc; /* Sombra suave para Google */
+    box-shadow: 5px 5px 10px var(--sombra-escura), -5px -5px 10px #ccc;
   }
   .btn-apple {
-    background: #000; /* Fundo preto para Apple */
-    color: #fff; /* Texto branco para Apple */
-    border: 1px solid #fff; /* Borda branca para Apple */
+    background: #000;
+    color: #fff;
+    border: 1px solid #fff;
     font-weight: bold;
-    box-shadow: 5px 5px 10px var(--sombra-escura), -5px -5px 10px #444; /* Sombra suave para Apple */
+    box-shadow: 5px 5px 10px var(--sombra-escura), -5px -5px 10px #444;
   }
   .btn:active {
-    /* Efeito de "pressionado" para os botões */
     box-shadow: inset 4px 4px 8px var(--sombra-escura), inset -4px -4px 8px var(--sombra-clara);
-    transform: scale(0.98); /* Pequeno encolhimento ao clicar */
+    transform: scale(0.98);
   }
-
   p {
-    color: #ccc; /* Cor para parágrafos como "Opcional" */
+    color: #ccc;
     margin-top: 1rem;
     margin-bottom: 1rem;
   }
-
-  /* SWIPE CARDS (mantido como estava, se funcionar, manteremos) */
   #swipe-area {
     position: relative;
     height: 70vh;
@@ -194,7 +183,7 @@
     color: #f44336;
   }
   .bottom-nav {
-    display: flex;
+    display: none; /* Inicia oculto e será exibido pelo JS */
     justify-content: space-around;
     background: var(--cor-menu);
     padding: 0.5rem 0;
@@ -203,7 +192,7 @@
     width: 100%;
     border-top: 1px solid #222;
     box-shadow: -5px -5px 10px var(--sombra-clara), 5px 5px 10px var(--sombra-escura);
-    z-index: 1000; /* Garante que a nav fique acima de outros elementos */
+    z-index: 1000;
   }
   .nav-list {
     display: flex;
@@ -227,7 +216,7 @@
     box-shadow: inset 4px 4px 8px var(--sombra-escura), inset -4px -4px 8px var(--sombra-clara);
   }
   .nav-item-active .nav-icon {
-    fill: var(--cor-texto-ativo);
+    filter: invert(50%) sepia(100%) saturate(2000%) hue-rotate(330deg) brightness(100%) contrast(100%); /* Efeito para cor-texto-ativo */
   }
   .nav-item-active .nav-text {
     color: var(--cor-texto-ativo);
@@ -236,12 +225,10 @@
     width: 24px;
     height: 24px;
     margin-bottom: 0.2rem;
-    fill: currentColor;
   }
   .nav-text {
     font-size: 0.75rem;
   }
-  /* TELAS */
   .profile-container {
     max-width: 400px;
     margin: 0 auto;
@@ -293,7 +280,6 @@
     margin: 0.25rem;
     box-shadow: -3px -3px 6px var(--sombra-clara), 3px 3px 6px var(--sombra-escura);
   }
-  /* LISTA PRÓXIMOS */
   .list-item {
     display: flex;
     align-items: center;
@@ -310,7 +296,6 @@
     margin-right: 1rem;
     object-fit: cover;
   }
-  /* FEED CAMINHOS */
   .crossing-feed {
     padding: 1rem;
     background: var(--cor-menu);
@@ -328,11 +313,11 @@
       <h2>Login / Cadastro</h2>
       <input type="email" id="email-input" placeholder="Seu e-mail" />
       <input type="password" id="password-input" placeholder="Sua senha" />
-      <button class="btn btn-primary" id="login-btn">Entrar</button>
-      <button class="btn btn-signup" id="signup-btn">Criar Conta</button>
+      <button class="btn btn-primary" id="login-btn" onclick="showScreen('deslizar')">Entrar</button>
+      <button class="btn btn-signup" id="signup-btn" onclick="showScreen('deslizar')">Criar Conta</button>
       <p style="font-size: 0.8rem; margin-top: 1rem;">Opcional: use os botões abaixo para login social</p>
-      <button class="btn btn-google">Entrar com Google</button>
-      <button class="btn btn-apple">Entrar com Apple</button>
+      <button class="btn btn-google" onclick="showScreen('deslizar')">Entrar com Google</button>
+      <button class="btn btn-apple" onclick="showScreen('deslizar')">Entrar com Apple</button>
     </div>
   </div>
 
@@ -395,24 +380,25 @@
     <p>Informações do usuário e configurações.</p>
   </div>
 
-  <div class="bottom-nav" style="display: flex;"> <button class="btn nav-item nav-item-active" onclick="showScreen('deslizar')">
-      <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+  <div class="bottom-nav">
+    <button class="btn nav-item nav-item-active" onclick="showScreen('deslizar')">
+      <img src="icons/deslizar.svg" alt="Deslizar" class="nav-icon">
       <span class="nav-text">Deslizar</span>
     </button>
     <button class="btn nav-item" onclick="showScreen('proximos')">
-      <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+      <img src="icons/proximos.svg" alt="Próximos" class="nav-icon">
       <span class="nav-text">Próximos</span>
     </button>
     <button class="btn nav-item" onclick="showScreen('caminhos')">
-      <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.01 0 1.97.26 2.8.72l-1.4-.72v3h6.77L17.65 6.35z"/></svg>
+      <img src="icons/caminhos.svg" alt="Caminhos" class="nav-icon">
       <span class="nav-text">Caminhos</span>
     </button>
     <button class="btn nav-item" onclick="showScreen('chat')">
-      <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
+      <img src="icons/chat.svg" alt="Chat" class="nav-icon">
       <span class="nav-text">Chat</span>
     </button>
     <button class="btn nav-item" onclick="showScreen('perfil')">
-      <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+      <img src="icons/perfil.svg" alt="Perfil" class="nav-icon">
       <span class="nav-text">Perfil</span>
     </button>
   </div>
@@ -422,7 +408,7 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
   <script>
-    // Inicialização do Firebase (apenas para referência, não está sendo usado ativamente neste momento para login)
+    // Inicialização do Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyANLlI4HsYSrJj9JVFxVoJbG2VoPvaPOL0",
       authDomain: "vibea-f902f.firebaseapp.com",
@@ -433,9 +419,8 @@
       measurementId: "G-KBD60NQJDW"
     };
     const app = firebase.initializeApp(firebaseConfig);
-    // const auth = app.auth(); // Comentado por enquanto
-    // const db = app.firestore(); // Comentado por enquanto
-
+    
+    // Variáveis globais
     const screens = document.querySelectorAll('.screen');
     const bottomNav = document.querySelector('.bottom-nav');
 
@@ -445,30 +430,35 @@
       });
       document.getElementById(screenId).classList.add('active');
 
-      // Atualiza o estado "ativo" da navegação inferior
+      if (screenId === 'login') {
+        bottomNav.style.display = 'none';
+      } else {
+        bottomNav.style.display = 'flex';
+      }
+
       document.querySelectorAll('.nav-item').forEach(item => {
         item.classList.remove('nav-item-active');
       });
-      const activeButton = document.querySelector(`.bottom-nav button[onclick*="${screenId}"]`);
-      if (activeButton) {
-        activeButton.classList.add('nav-item-active');
+      if (screenId !== 'login') {
+        const activeButton = document.querySelector(`.bottom-nav button[onclick*="${screenId}"]`);
+        if (activeButton) {
+          activeButton.classList.add('nav-item-active');
+        }
       }
     }
 
-    // Inicializa na tela de login
-    showScreen('login'); 
+    showScreen('login');
 
-    // Lógica do Swipe de Cartões (mantida)
     const swipeArea = document.getElementById('swipe-area');
     const likeStatus = document.querySelector('.swipe-status.like');
     const dislikeStatus = document.querySelector('.swipe-status.dislike');
-    let topCard = swipeArea.lastElementChild; // O último elemento adicionado é o primeiro a ser exibido
+    let topCard = swipeArea ? swipeArea.lastElementChild : null;
     let isDragging = false;
     let startX;
     let currentX;
 
     function addDragEvents(card) {
-      if (!card || card.classList.contains('swipe-status')) return; // Ignora elementos de status
+      if (!card || card.classList.contains('swipe-status')) return;
 
       card.addEventListener('mousedown', startDrag);
       card.addEventListener('touchstart', startDrag, { passive: true });
@@ -476,7 +466,7 @@
       card.addEventListener('touchmove', drag, { passive: true });
       card.addEventListener('mouseup', endDrag);
       card.addEventListener('touchend', endDrag);
-      card.addEventListener('mouseleave', endDrag); // Caso o mouse saia da área do cartão
+      card.addEventListener('mouseleave', endDrag);
     }
 
     if (topCard) {
@@ -486,16 +476,15 @@
     function startDrag(e) {
       isDragging = true;
       startX = e.clientX || e.touches[0].clientX;
-      if (topCard) topCard.style.transition = ''; // Remove transição para arrastar suavemente
+      if (topCard) topCard.style.transition = '';
     }
 
     function drag(e) {
       if (!isDragging || !topCard) return;
       currentX = e.clientX || e.touches[0].clientX;
       const dx = currentX - startX;
-      topCard.style.transform = `translateX(${dx}px) rotate(${dx / 20}deg)`; // Gira um pouco ao arrastar
+      topCard.style.transform = `translateX(${dx}px) rotate(${dx / 20}deg)`;
 
-      // Mostra o status de Like/Dislike
       if (dx > 50) {
         likeStatus.style.opacity = 1;
         dislikeStatus.style.opacity = 0;
@@ -512,39 +501,26 @@
       if (!isDragging || !topCard) return;
       isDragging = false;
       const dx = currentX - startX;
-      const threshold = 100; // Distância mínima para considerar um swipe
-      if (topCard) topCard.style.transition = 'transform 0.3s ease, opacity 0.3s ease'; // Adiciona transição de volta
-
+      const threshold = 100;
+      if(topCard) topCard.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
       likeStatus.style.opacity = 0;
       dislikeStatus.style.opacity = 0;
-
       if (Math.abs(dx) > threshold) {
-        // Swipe concluído
         topCard.style.transform = `translateX(${dx > 0 ? 1000 : -1000}px) rotate(${dx > 0 ? 45 : -45}deg)`;
-        topCard.style.opacity = '0'; // Faz o cartão desaparecer
+        topCard.style.opacity = '0';
         setTimeout(() => {
-          topCard.remove(); // Remove o cartão do DOM
-          topCard = swipeArea.lastElementChild; // Pega o próximo cartão
+          topCard.remove();
+          topCard = swipeArea.lastElementChild;
           if (topCard) {
-            addDragEvents(topCard); // Adiciona eventos ao novo cartão
+            addDragEvents(topCard);
           } else {
             console.log("Todos os cartões foram deslizados!");
-            // Aqui você pode carregar mais cartões ou exibir uma mensagem
           }
-        }, 300); // Espera a transição terminar antes de remover
+        }, 300);
       } else {
-        // Retorna o cartão à posição original
         topCard.style.transform = 'translateX(0px) rotate(0deg)';
       }
     }
-
-    // Ações para os botões de navegação inferior (se necessário)
-    document.querySelectorAll('.bottom-nav .btn').forEach(button => {
-        button.addEventListener('click', () => {
-            document.querySelectorAll('.bottom-nav .btn').forEach(btn => btn.classList.remove('nav-item-active'));
-            button.classList.add('nav-item-active');
-        });
-    });
 
   </script>
 </body>
