@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vibea+ - Aplicativo Mobile</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --cor-fundo: #121212;
+    --cor-menu: #212121;
+    --sombra-clara: #333333;
+    --sombra-escura: #000000;
+    --cor-texto: #ffffff;
+    --cor-primaria: #7C5CFC;
+    --cor-texto-ativo: #ff8c00;
+  }
+  body {
+    font-family: Arial, sans-serif;
+    background: var(--cor-fundo);
+    color: var(--cor-texto);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+  }
+  h2, h3, p { margin-bottom: 0.5rem; }
+  .screen {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+    flex: 1;
+    background: var(--cor-fundo);
+    transition: left 0.3s ease-in-out;
+    overflow-y: auto;
+  }
+  .screen.active { left: 0; }
+  .login-title { font-size: 2.5rem; margin-bottom: 1rem; text-align: center; }
+  .card {
+    background: var(--cor-menu);
+    border-radius: 16px;
+    padding: 1rem;
+    margin: 1rem auto;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: -5px -5px 10px var(--sombra-clara), 5px 5px 10px var(--sombra-escura);
+  }
+  .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border-radius: 12px;
+    border: none;
+    width: 100%;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.2s;
+    box-shadow: 4px 4px 8px var(--sombra-escura), -4px -4px 8px var(--sombra-clara);
+  }
+  .btn-primary { background: var(--cor-primaria); color: #fff; }
+  .btn-google { background: #fff; color: #000; }
+  .btn-apple { background: #000; color: #fff; border: 1px solid #fff; }
+  .btn:active {
+    box-shadow: inset 4px 4px 8px var(--sombra-escura), inset -4px -4px 8px var(--sombra-clara);
+  }
+  /* SWIPE CARDS */
+  #swipe-area {
+    position: relative;
+    height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: none;
+  }
+  .profile-card {
+    position: absolute;
+    width: 90%;
+    max-width: 350px;
+    background: var(--cor-menu);
+    border-radius: 20px;
+    overflow: hidden;
+    text-align: center;
+    cursor: grab;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    box-shadow: -5px -5px 10px var(--sombra-clara), 5px 5px 10px var(--sombra-escura);
+  }
+  .profile-card img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+  }
+  .profile-info { padding: 1rem; }
+  .swipe-status {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 4rem;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .swipe-status.like { color: #2196F3; }
+  .swipe-status.dislike { color: #f44336; }
+  .bottom-nav {
+    display: flex;
+    justify-content: space-around;
+    background: var(--cor-menu);
+    padding: 0.5rem 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    border-top: 1px solid #222;
+    box-shadow: -5px -5px 10px var(--sombra-clara), 5px 5px 10px var(--sombra-escura);
+  }
+  .nav-list { display: flex; width: 100%; justify-content: space-around; list-style: none; }
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--cor-texto);
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+    box-shadow: -4px -4px 8px var(--sombra-clara), 4px 4px 8px var(--sombra-escura);
+  }
+  .nav-item-active {
+    box-shadow: inset 4px 4px 8px var(--sombra-escura), inset -4px -4px 8px var(--sombra-clara);
+  }
+  .nav-item-active .nav-icon { fill: var(--cor-texto-ativo); }
+  .nav-item-active .nav-text { color: var(--cor-texto-ativo); }
+  .nav-icon { width: 24px; height: 24px; margin-bottom: 0.2rem; fill: currentColor; }
+  .nav-text { font-size: 0.75rem; }
+  /* TELAS */
+  .profile-container {
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: center;
+    padding-top: 2rem;
+  }
+  .profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 1rem;
+    box-shadow: -5px -5px 10px var(--sombra-clara), 5px 5px 10px var(--sombra-escura);
+  }
+  .profile-info {
+    padding: 1rem;
+    border-radius: 16px;
+    background: var(--cor-menu);
+    margin-bottom: 1rem;
+    box-shadow: inset 4px 4px 8px var(--sombra-escura), inset -4px -4px 8px var(--sombra-clara);
+    text-align: left;
+  }
+  .profile-info h3 { margin: 0.5rem 0; }
+  .profile-info .info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #333;
+  }
+  .profile-info .info-row:last-child { border-bottom: none; }
+  .profile-interests {
+    padding: 1rem;
+    background: var(--cor-menu);
+    border-radius: 16px;
+    box-shadow: inset 4px 4px 8px var(--sombra-escura), inset -4px -4px 8px var(--sombra-clara);
+    text-align: left;
+    margin-bottom: 1rem;
+  }
+  .interest-tag {
+    display: inline-block;
+    background: var(--cor-fundo);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    margin: 0.25rem;
+    box-shadow: -3px -3px 6px var(--sombra-clara), 3px 3px 6px var(--sombra-escura);
+  }
+  /* LISTA PRÓXIMOS */
+  .list-item {
+    display: flex;
+    align-items: center;
+    background: var(--cor-menu);
+    border-radius: 12px;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    box-shadow: -3px -3px 6px var(--sombra-clara), 3px 3px 6px var(--sombra-escura);
+  }
+  .list-item img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-right: 1rem;
+    object-fit: cover;
+  }
+  /* FEED CAMINHOS */
+  .crossing-feed {
+    padding: 1rem;
+    background: var(--cor-menu);
+    border-radius: 12px;
+    margin-bottom: 0.5rem;
+    box-shadow: inset 3px 3px 6px var(--sombra-escura), inset -3px -3px 6px var(--sombra-clara);
+  }
+</style>
+</head>
+<body>
+  <div id="login" class="screen active">
+    <div class="login-title">Vibea+</div>
+    <p>Onde seus caminhos se cruzam com as pessoas certas</p>
+    <div class="card">
+      <h2>Login / Cadastro</h2>
+      <input type="email" id="email-input" placeholder="Seu e-mail" class="btn" style="text-align: left; padding: 1rem;" />
+      <input type="password" id="password-input" placeholder="Sua senha" class="btn" style="text-align: left; padding: 1rem;" />
+      <button class="btn btn-primary" onclick="handleLogin()">Entrar</button>
+      <button class="btn" onclick="handleSignup()" style="background: #282828; color: #ccc;">Criar Conta</button>
+      <p style="font-size: 0.8rem; margin-top: 1rem;">Opcional: use os botões abaixo para login social</p>
+      <button class="btn btn-google" onclick="showScreen('deslizar')">Entrar com Google</button>
+      <button class="btn btn-apple" onclick="showScreen('deslizar')">Entrar com Apple</button>
+    </div>
+  </div>
+
+  <div id="deslizar" class="screen">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <h2>Modo Deslizar</h2>
+      <button class="btn" onclick="handleLogout()" style="width: auto; padding: 0.5rem 1rem; font-size: 0.9rem; margin-bottom: 0;">Sair</button>
+    </div>
+    <div id="swipe-area">
+      <div class="swipe-status like">💚</div>
+      <div class="swipe-status dislike">❌</div>
+      <div class="profile-card">
+        <img src="https://via.placeholder.com/400" alt="Foto do perfil">
+        <div class="profile-info">
+          <h3>Maria, 25</h3>
+          <p>Artista e amante de gatos. A 1km de distância.</p>
+        </div>
+      </div>
+      <div class="profile-card">
+        <img src="https://via.placeholder.com/400" alt="Foto do perfil">
+        <div class="profile-info">
+          <h3>João, 28</h3>
+          <p>Engenheiro e surfista. A 2km de distância.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="proximos" class="screen">
+    <h2>Próximos</h2>
+    <div class="list-item">
+      <img src="https://via.placeholder.com/60" alt="User">
+      <div>
+        <h3>Ana, 27</h3>
+        <p>A 500m de distância</p>
+      </div>
+    </div>
+    <div class="list-item">
+      <img src="https://via.placeholder.com/60" alt="User">
+      <div>
+        <h3>Carlos, 30</h3>
+        <p>A 1km de distância</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="caminhos" class="screen">
+    <h2>Caminhos</h2>
+    <div class="crossing-feed">Você cruzou com Maria (há 15min)</div>
+    <div class="crossing-feed">Você cruzou com Pedro (há 1h)</div>
+  </div>
+
+  <div id="chat" class="screen">
+    <h2>Chat</h2>
+    <p>Aqui você verá suas mensagens.</p>
+  </div>
+
+  <div id="perfil" class="screen">
+    <h2>Perfil</h2>
+    <p>Informações do usuário e configurações.</p>
+  </div>
+
+  <div class="bottom-nav">
+    <button onclick="showScreen('deslizar')">Deslizar</button>
+    <button onclick="showScreen('proximos')">Próximos</button>
+    <button onclick="showScreen('caminhos')">Caminhos</button>
+    <button onclick="showScreen('chat')">Chat</button>
+    <button onclick="showScreen('perfil')">Perfil</button>
+  </div>
+  
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+  <script>
+    // Import the functions you need from the SDKs you need
+    // Essas linhas foram comentadas para evitar erros de importação com a versão 8 do Firebase
+    // import { initializeApp } from "firebase/app";
+    // import { getAnalytics } from "firebase/analytics";
+    
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyANLlI4HsYSrJj9JVFxVoJbG2VoPvaPOL0",
+      authDomain: "vibea-f902f.firebaseapp.com",
+      projectId: "vibea-f902f",
+      storageBucket: "vibea-f902f.firebasestorage.app",
+      messagingSenderId: "929388500407",
+      appId: "1:929388500407:web:cf80374b170c3d9d990432",
+      measurementId: "G-KBD60NQJDW"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = app.auth();
+    const db = app.firestore();
+
+    const screens = document.querySelectorAll('.screen');
+    const bottomNav = document.querySelector('.bottom-nav');
+
+    function showScreen(screenId) {
+      screens.forEach(screen => {
+        screen.classList.remove('active');
+      });
+      document.getElementById(screenId).classList.add('active');
+    }
+
+    // Lógica para esconder a barra de navegação se o usuário não estiver logado
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        showScreen('deslizar');
+        bottomNav.style.display = 'flex';
+        loadSwipeProfiles();
+        loadUserProfile(user);
+      } else {
+        showScreen('login');
+        bottomNav.style.display = 'none';
+      }
+    });
+
+    function handleLogin() {
+      const email = document.getElementById('email-input').value;
+      const password = document.getElementById('password-input').value;
+
+      auth.signInWithEmailAndPassword(email, password)
+        .then(() => {
+          console.log("Usuário logado com sucesso!");
+        })
+        .catch((error) => {
+          console.error("Erro no login:", error.code, error.message);
+          alert(`Erro no login: ${error.message}`);
+        });
+    }
+
+    function handleSignup() {
+      const email = document.getElementById('email-input').value;
+      const password = document.getElementById('password-input').value;
+
+      auth.createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          return db.collection("users").doc(user.uid).set({
+            email: email,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        })
+        .then(() => {
+          console.log("Usuário cadastrado com sucesso e dados salvos!");
+          alert("Conta criada com sucesso! Faça login para continuar.");
+        })
+        .catch((error) => {
+          console.error("Erro no cadastro:", error.code, error.message);
+          alert(`Erro no cadastro: ${error.message}`);
+        });
+    }
+
+    function handleLogout() {
+      auth.signOut()
+        .then(() => {
+          console.log("Usuário deslogado com sucesso!");
+        })
+        .catch((error) => {
+          console.error("Erro ao deslogar:", error.message);
+          alert(`Erro ao deslogar: ${error.message}`);
+        });
+    }
+
+    function loadUserProfile(user) {
+      db.collection("users").doc(user.uid).get()
+        .then((doc) => {
+          if (doc.exists) {
+            console.log("Dados do perfil:", doc.data());
+          } else {
+            console.log("Nenhum dado de perfil encontrado!");
+          }
+        })
+        .catch((error) => {
+          console.error("Erro ao carregar o perfil:", error);
+        });
+    }
+
+    function loadSwipeProfiles() {
+      // Lógica para carregar perfis para o swipe
+      console.log("Carregando perfis para deslizar...");
+    }
+
+    // Lógica do Swipe de Cartões
+    const swipeArea = document.getElementById('swipe-area');
+    const likeStatus = document.querySelector('.swipe-status.like');
+    const dislikeStatus = document.querySelector('.swipe-status.dislike');
+    let topCard = swipeArea.lastElementChild;
+    let isDragging = false;
+    let startX;
+    let currentX;
+
+    function addDragEvents(card) {
+      card.addEventListener('mousedown', startDrag);
+      card.addEventListener('touchstart', startDrag, { passive: true });
+      card.addEventListener('mousemove', drag);
+      card.addEventListener('touchmove', drag, { passive: true });
+      card.addEventListener('mouseup', endDrag);
+      card.addEventListener('touchend', endDrag);
+      card.addEventListener('mouseleave', endDrag);
+    }
+
+    if (topCard) {
+      addDragEvents(topCard);
+    }
+
+    function startDrag(e) {
+      isDragging = true;
+      startX = e.clientX || e.touches[0].clientX;
+      if (topCard) topCard.style.transition = '';
+    }
+
+    function drag(e) {
+      if (!isDragging || !topCard) return;
+      currentX = e.clientX || e.touches[0].clientX;
+      const dx = currentX - startX;
+      topCard.style.transform = `translateX(${dx}px) rotate(${dx / 20}deg)`;
+      if (dx > 50) {
+        likeStatus.style.opacity = 1;
+        dislikeStatus.style.opacity = 0;
+      } else if (dx < -50) {
+        likeStatus.style.opacity = 0;
+        dislikeStatus.style.opacity = 1;
+      } else {
+        likeStatus.style.opacity = 0;
+        dislikeStatus.style.opacity = 0;
+      }
+    }
+
+    function endDrag(e) {
+      if (!isDragging || !topCard) return;
+      isDragging = false;
+      const dx = currentX - startX;
+      const threshold = 100;
+      if(topCard) topCard.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+      likeStatus.style.opacity = 0;
+      dislikeStatus.style.opacity = 0;
+      if (Math.abs(dx) > threshold) {
+        topCard.style.transform = `translateX(${dx > 0 ? 1000 : -1000}px) rotate(${dx > 0 ? 45 : -45}deg)`;
+        topCard.style.opacity = '0';
+        setTimeout(() => {
+          topCard.remove();
+          topCard = swipeArea.lastElementChild;
+          if (topCard) {
+            addDragEvents(topCard);
+          }
+        }, 300);
+      } else {
+        topCard.style.transform = 'translateX(0px) rotate(0deg)';
+      }
+    }
+    
+    // Certifique-se de que a barra de navegação comece escondida
+    bottomNav.style.display = 'none';
+
+  </script>
+</body>
+</html>

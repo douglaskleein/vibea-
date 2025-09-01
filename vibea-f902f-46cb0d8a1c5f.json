@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "vibea-f902f",
+  "private_key_id": "46cb0d8a1c5f4426b1571a20f69d961b7dc62f89",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCcxpn0tLyDF8hX\nEHteuqWMOcnHTxxsTwtNpl8T73tMT2TBDHzHKC39OgvQkHkk9mM9gWR/sRdG49yw\nv73B4eyMKgzJi0pNQw2gZPtuUE5viUdaKCxW+/2K6Bp9abuVPdBnfRvdQFf+bwXS\nkzBGrPPC3OnOA6ptYNuuOZkVVj83rrA1DYr2eyp9VGbtZv9c6gJrmaAtZgvBQzAH\n0yUwMflP/qLZYUqiOxbzvK/amk26svWztfUpz4jB3dqo+BfK74bd7oxYqTtfbrmZ\nJEPoQEOnw57Vv4AgewHGueXKzksd8ehnceD2gmWoW5xa1HdiSd7OxvUjD0O+B5OX\n/w4cFBGXAgMBAAECggEAJrXLEecGnP/kUcsaCzve4I7sSbA4/m1OBzBLTarWMPNx\nl1E0BiDfqiUJAciKgRvtSSSH4heh/bkJpwLRIexc8gb3/VPNVuJ1nOMSShy+IUAu\nRA6jVB8IbaH92HWhAaqvqL31gV3/3C0hrOr3Apx12+mcOWgiTruZwp0qNWCEX4T5\njiaYcYkDx68rD8ZtuIBhvp/G1Ku5hkAtNszFfcyBBI0lKK+FqVnEi/s+Agrjlc26\n5ag8vVyfU0qLitj9yFzOwxHI1Hdi5D6+PRobc/523F2A0a3MdS1XaQZJYLTMhkgY\n6dYmPXmFjZ4KwqsL+4kQldtWm7lOEQufIRolWoT9sQKBgQDVntemgwV0jDIykRZU\nhDmRjZAN8VVf2X4Re9uVffw4ENmRSZ+p08jU1O/vlh2+tsga50qBCZxmCwNJPTGq\nr7+I96yj+bVPpxjOo0L52qkc8GWnsYaowAzNSzrnqNRo7KJwjn9yQ9gKQGrsgGXp\nnp5SehgttOx/l9YyFi6VhKCW1QKBgQC74MipUEjbG6SU4S4PoxbbIWge1gx11TO1\nvUM1Spa4Bc90gLdvPoZJv+IDa0t1iLjB4DVf2c+Fjy3c/LW97NtmaJsiZRZrLBSz\nLnJx+zV2+VzOwAIR9W1HNSIfZwMSRLpEJgl/MDeVCUeIczmT9OKx55bBv/VdsWoL\np/O+GChUuwKBgAlYWJDFPJDbrTp/FF4AJtCSQ9IIU7bMufIj2/hPOaBuREZR1TVF\nuYxuAE0X4Rc9wcVDhwPcGsZwBuXGUozoAVYJl7jYrLDeW3x2sfBiO3Gzpo7OeliZ\nhjXY66vEu/4XFAgeg77I7wOLy+GqwEqXENAE3VfqiUoPp2QrikAqPCg9AoGAEOQQ\npkg1hJ1jmo70GSvMbj7+oWcVD7LvRzOQy0W9byX2lL7Nvw6b/B1oMG6BBjwYgDWs\nFsX6RkOtF+UQYdbdksNszxbPgSshYUqXt2+iSuP4WA4jIYIzJOe9/ZzBRe8v39ib\nmfe3x4piB/5z+r1VdDEh+KFNafL9WbbrzvdVCOkCgYEAnFpStjZRebZTux88EC+y\nRVi0Df0J5oUmVQ86UoVPsunnKY2tHkFrtX6iJuFfKvp2gRymUNbRsGomKYlneW/3\nKa+TXrhKZ5kyf5I08tT4lp10lg1K1rsuCsM2e3EcjEta7O1arRuWu25tXyKOjcFy\nmssx+BV2uoMKwCW2K/iVoV4=\n-----END PRIVATE KEY-----\n",
+  "client_email": "github-action-1048512419@vibea-f902f.iam.gserviceaccount.com",
+  "client_id": "106427980211062212392",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/github-action-1048512419%40vibea-f902f.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
