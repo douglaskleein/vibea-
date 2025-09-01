@@ -69,7 +69,10 @@
     box-shadow: -10px -10px 20px var(--sombra-clara), 10px 10px 20px var(--sombra-escura);
   }
   .card input[type="email"],
-  .card input[type="password"] {
+  .card input[type="password"],
+  .card input[type="text"],
+  .card input[type="number"],
+  .card textarea {
     display: block;
     width: 100%;
     padding: 1rem 1.5rem;
@@ -83,8 +86,12 @@
     box-shadow: inset 5px 5px 10px var(--sombra-escura), inset -5px -5px 10px var(--sombra-clara);
     outline: none;
   }
-  .card input[type="email"]::placeholder,
-  .card input[type="password"]::placeholder {
+  .card textarea {
+    height: 100px;
+    resize: none;
+  }
+  .card input::placeholder,
+  .card textarea::placeholder {
     color: #888;
   }
   .btn {
@@ -183,7 +190,7 @@
     color: #f44336;
   }
   .bottom-nav {
-    display: none; /* Inicia oculto e será exibido pelo JS */
+    display: none;
     justify-content: space-around;
     background: var(--cor-menu);
     padding: 0.5rem 0;
@@ -216,7 +223,6 @@
     box-shadow: inset 4px 4px 8px var(--sombra-escura), inset -4px -4px 8px var(--sombra-clara);
   }
   .nav-item-active .nav-icon {
-    /* Filtro para mudar a cor do ícone para a cor de texto ativa */
     filter: invert(50%) sepia(100%) saturate(2000%) hue-rotate(330deg) brightness(100%) contrast(100%);
   }
   .nav-item-active .nav-text {
@@ -244,7 +250,7 @@
     margin-bottom: 1rem;
     box-shadow: -5px -5px 10px var(--sombra-clara), 5px 5px 10px var(--sombra-escura);
   }
-  .profile-info {
+  .profile-info-display {
     padding: 1rem;
     border-radius: 16px;
     background: var(--cor-menu);
@@ -252,17 +258,17 @@
     box-shadow: inset 4px 4px 8px var(--sombra-escura), inset -4px -4px 8px var(--sombra-clara);
     text-align: left;
   }
-  .profile-info h3 {
+  .profile-info-display h3 {
     margin: 0.5rem 0;
   }
-  .profile-info .info-row {
+  .profile-info-display .info-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0.5rem 0;
     border-bottom: 1px solid #333;
   }
-  .profile-info .info-row:last-child {
+  .profile-info-display .info-row:last-child {
     border-bottom: none;
   }
   .profile-interests {
@@ -322,6 +328,18 @@
     </div>
   </div>
 
+  <div id="perfil-onboarding" class="screen">
+    <div class="login-title">Complete seu Perfil</div>
+    <div class="card">
+      <p>Preencha suas informações para começar.</p>
+      <input type="text" id="profile-name" placeholder="Seu nome" required />
+      <input type="number" id="profile-age" placeholder="Sua idade" required />
+      <input type="text" id="profile-bio" placeholder="Fale um pouco sobre você" required />
+      <input type="text" id="profile-photo-url" placeholder="URL da sua foto (ex: link de uma imagem)" required />
+      <button class="btn btn-primary" onclick="saveUserProfile()">Salvar Perfil</button>
+    </div>
+  </div>
+
   <div id="deslizar" class="screen">
     <div style="display: flex; justify-content: space-between; align-items: center; width: 90%; max-width: 400px; margin-top: 1rem;">
       <h2>Modo Deslizar</h2>
@@ -332,14 +350,14 @@
       <div class="swipe-status dislike">❌</div>
       <div class="profile-card">
         <img src="https://via.placeholder.com/400/7C5CFC/FFFFFF?text=Maria,25" alt="Foto do perfil">
-        <div class="profile-info">
+        <div class="profile-info-display">
           <h3>Maria, 25</h3>
           <p>Artista e amante de gatos. A 1km de distância.</p>
         </div>
       </div>
       <div class="profile-card">
         <img src="https://via.placeholder.com/400/7C5CFC/FFFFFF?text=Joao,28" alt="Foto do perfil">
-        <div class="profile-info">
+        <div class="profile-info-display">
           <h3>João, 28</h3>
           <p>Engenheiro e surfista. A 2km de distância.</p>
         </div>
@@ -420,13 +438,14 @@
     };
     const app = firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
-    
+    const db = firebase.firestore();
+
     const screens = document.querySelectorAll('.screen');
     const bottomNav = document.querySelector('.bottom-nav');
     const emailInput = document.getElementById('email-input');
     const passwordInput = document.getElementById('password-input');
 
-    function showScreen(screenId) {
+    async function showScreen(screenId) {
       screens.forEach(screen => {
         screen.classList.remove('active');
       });
@@ -441,7 +460,7 @@
       document.querySelectorAll('.nav-item').forEach(item => {
         item.classList.remove('nav-item-active');
       });
-      if (screenId !== 'login') {
+      if (screenId !== 'login' && screenId !== 'perfil-onboarding') {
         const activeButton = document.querySelector(`.bottom-nav button[onclick*="${screenId}"]`);
         if (activeButton) {
           activeButton.classList.add('nav-item-active');
@@ -451,15 +470,31 @@
     showScreen('login');
 
     // Funções de Autenticação do Firebase
+    function checkUserProfile() {
+      const user = auth.currentUser;
+      if (user) {
+        db.collection('users').doc(user.uid).get().then(doc => {
+          if (doc.exists) {
+            alert("Login bem-sucedido!");
+            showScreen('deslizar');
+          } else {
+            alert("Por favor, complete seu perfil.");
+            showScreen('perfil-onboarding');
+          }
+        }).catch(error => {
+          console.error("Erro ao verificar o perfil:", error);
+          alert("Erro ao verificar o perfil. Tente novamente.");
+        });
+      }
+    }
+
     function handleSignup() {
       const email = emailInput.value;
       const password = passwordInput.value;
       
       auth.createUserWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-          // Usuário criado com sucesso
-          alert("Conta criada com sucesso!");
-          showScreen('deslizar');
+        .then(() => {
+          checkUserProfile();
         })
         .catch((error) => {
           let errorMessage = "Ocorreu um erro. Tente novamente.";
@@ -479,10 +514,8 @@
       const password = passwordInput.value;
 
       auth.signInWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-          // Login bem-sucedido
-          alert("Login bem-sucedido!");
-          showScreen('deslizar');
+        .then(() => {
+          checkUserProfile();
         })
         .catch((error) => {
           let errorMessage = "Ocorreu um erro. Verifique seu e-mail e senha.";
@@ -497,9 +530,8 @@
     function handleGoogleLogin() {
       const provider = new firebase.auth.GoogleAuthProvider();
       auth.signInWithPopup(provider)
-        .then((result) => {
-          alert("Login com Google bem-sucedido!");
-          showScreen('deslizar');
+        .then(() => {
+          checkUserProfile();
         }).catch((error) => {
           console.error("Erro no login com Google:", error);
           alert("Erro ao fazer login com Google. Tente novamente.");
@@ -510,15 +542,42 @@
     function handleAppleLogin() {
       const provider = new firebase.auth.OAuthProvider('apple.com');
       auth.signInWithPopup(provider)
-        .then((result) => {
-          alert("Login com Apple bem-sucedido!");
-          showScreen('deslizar');
+        .then(() => {
+          checkUserProfile();
         }).catch((error) => {
           console.error("Erro no login com Apple:", error);
           alert("Erro ao fazer login com Apple. Tente novamente.");
         });
     }
 
+    // Salvar Perfil do Usuário no Firestore
+    function saveUserProfile() {
+      const user = auth.currentUser;
+      const name = document.getElementById('profile-name').value;
+      const age = document.getElementById('profile-age').value;
+      const bio = document.getElementById('profile-bio').value;
+      const photoUrl = document.getElementById('profile-photo-url').value;
+
+      if (!name || !age || !bio || !photoUrl) {
+        alert("Por favor, preencha todos os campos.");
+        return;
+      }
+
+      db.collection('users').doc(user.uid).set({
+        name: name,
+        age: parseInt(age),
+        bio: bio,
+        photoUrl: photoUrl,
+        email: user.email,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      }).then(() => {
+        alert("Perfil salvo com sucesso!");
+        showScreen('deslizar');
+      }).catch(error => {
+        console.error("Erro ao salvar o perfil:", error);
+        alert("Erro ao salvar o perfil. Tente novamente.");
+      });
+    }
 
     const swipeArea = document.getElementById('swipe-area');
     const likeStatus = document.querySelector('.swipe-status.like');
