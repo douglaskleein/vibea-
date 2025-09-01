@@ -360,13 +360,14 @@
 
   <div id="caminhos" class="screen">
     <h2>Caminhos</h2>
-    <div class="crossing-feed">Você cruzou com Maria (há 15min)</div>
-    <div class="crossing-feed">Você cruzou com Pedro (há 1h)</div>
+    <div id="crossing-feed-container">
+      </div>
   </div>
 
   <div id="chat" class="screen">
     <h2>Chat</h2>
-    <p>Aqui você verá suas mensagens.</p>
+    <div id="chat-feed-container">
+      </div>
   </div>
 
   <div id="perfil" class="screen">
@@ -456,6 +457,12 @@
       }
       if (screenId === 'proximos') {
         loadNearbyProfiles();
+      }
+      if (screenId === 'caminhos') {
+        loadCrossingFeed();
+      }
+      if (screenId === 'chat') {
+        loadChatFeed();
       }
     }
     showScreen('login');
@@ -633,12 +640,11 @@
       }
     }
 
-    // NOVA FUNÇÃO: Carregar lista de perfis para a tela de próximos
     async function loadNearbyProfiles() {
       const container = document.getElementById('nearby-profiles-container');
       const currentUser = auth.currentUser;
-      container.innerHTML = ''; // Limpa os itens antigos
-
+      container.innerHTML = '';
+      
       try {
         const usersRef = db.collection('users');
         const snapshot = await usersRef.get();
@@ -670,6 +676,43 @@
       } catch (error) {
         console.error("Erro ao carregar perfis próximos:", error);
       }
+    }
+
+    // NOVA FUNÇÃO: Carregar feed de cruzamentos
+    async function loadCrossingFeed() {
+        const container = document.getElementById('crossing-feed-container');
+        container.innerHTML = ''; // Limpa o feed
+
+        // Exemplo de dados de cruzamento (seria substituído por dados do Firestore)
+        const dummyCrossings = [
+            { name: "Maria", time: "15min" },
+            { name: "Pedro", time: "1h" },
+            { name: "Ana", time: "2h" },
+        ];
+
+        if (dummyCrossings.length === 0) {
+            container.innerHTML = `<p style="text-align: center; margin-top: 2rem;">Nenhum cruzamento recente encontrado.</p>`;
+            return;
+        }
+
+        dummyCrossings.forEach(crossing => {
+            const feedItem = document.createElement('div');
+            feedItem.className = 'crossing-feed';
+            feedItem.innerText = `Você cruzou com ${crossing.name} (há ${crossing.time})`;
+            container.appendChild(feedItem);
+        });
+    }
+
+    // NOVA FUNÇÃO: Carregar feed de chat
+    function loadChatFeed() {
+        const container = document.getElementById('chat-feed-container');
+        container.innerHTML = ''; // Limpa o feed
+
+        const chatPlaceholder = document.createElement('div');
+        chatPlaceholder.style.textAlign = 'center';
+        chatPlaceholder.style.marginTop = '2rem';
+        chatPlaceholder.innerHTML = `<p>A lógica do Chat será implementada em uma próxima etapa. Aqui você verá suas mensagens!</p>`;
+        container.appendChild(chatPlaceholder);
     }
 
     const swipeArea = document.getElementById('swipe-area');
