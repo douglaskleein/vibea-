@@ -1,0 +1,228 @@
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --cor-fundo: #121212;
+    --cor-menu: #212121;
+    --sombra-clara: #333333;
+    --sombra-escura: #000000;
+    --cor-texto: #ffffff;
+    --cor-primaria: #7C5CFC;
+    --cor-texto-ativo: #ff8c00;
+  }
+  body {
+    font-family: Arial, sans-serif;
+    background: var(--cor-fundo);
+    color: var(--cor-texto);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+  }
+  h2, h3, p { margin-bottom: 0.5rem; }
+  .screen {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+    flex: 1;
+    background: var(--cor-fundo);
+    transition: left 0.3s ease-in-out;
+    overflow-y: auto;
+  }
+  .screen.active { left: 0; }
+  .login-title { font-size: 2.5rem; margin-bottom: 1rem; text-align: center; }
+  .card {
+    background: var(--cor-menu);
+    border-radius: 16px;
+    padding: 1rem;
+    margin: 1rem auto;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: -5px -5px 10px var(--sombra-clara), 5px 5px 10px var(--sombra-escura);
+  }
+  /* Adicionado/Modificado para campos de input dentro do card */
+  .card input[type="email"],
+  .card input[type="password"] {
+    display: block; /* Para que cada input fique em uma linha */
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border-radius: 12px;
+    border: none;
+    font-size: 1rem;
+    background: var(--cor-fundo); /* Fundo dos inputs */
+    color: var(--cor-texto);
+    text-align: left;
+    box-shadow: inset 2px 2px 5px var(--sombra-escura), inset -2px -2px 5px var(--sombra-clara);
+  }
+  .card input[type="email"]::placeholder,
+  .card input[type="password"]::placeholder {
+    color: #aaa;
+  }
+
+  .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border-radius: 12px;
+    border: none;
+    width: 100%;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.2s;
+    box-shadow: 4px 4px 8px var(--sombra-escura), -4px -4px 8px var(--sombra-clara);
+  }
+  .btn-primary { background: var(--cor-primaria); color: #fff; }
+  .btn-google { background: #fff; color: #000; }
+  .btn-apple { background: #000; color: #fff; border: 1px solid #fff; }
+  .btn:active {
+    box-shadow: inset 4px 4px 8px var(--sombra-escura), inset -4px -4px 8px var(--sombra-clara);
+  }
+  /* SWIPE CARDS */
+  #swipe-area {
+    position: relative;
+    height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: none;
+  }
+  .profile-card {
+    position: absolute;
+    width: 90%;
+    max-width: 350px;
+    background: var(--cor-menu);
+    border-radius: 20px;
+    overflow: hidden;
+    text-align: center;
+    cursor: grab;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    box-shadow: -5px -5px 10px var(--sombra-clara), 5px 5px 10px var(--sombra-escura);
+  }
+  .profile-card img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+  }
+  .profile-info { padding: 1rem; }
+  .swipe-status {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 4rem;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .swipe-status.like { color: #2196F3; }
+  .swipe-status.dislike { color: #f44336; }
+  .bottom-nav {
+    display: flex;
+    justify-content: space-around;
+    background: var(--cor-menu);
+    padding: 0.5rem 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    border-top: 1px solid #222;
+    box-shadow: -5px -5px 10px var(--sombra-clara), 5px 5px 10px var(--sombra-escura);
+  }
+  .nav-list { display: flex; width: 100%; justify-content: space-around; list-style: none; }
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--cor-texto);
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+    box-shadow: -4px -4px 8px var(--sombra-clara), 4px 4px 8px var(--sombra-escura);
+  }
+  .nav-item-active {
+    box-shadow: inset 4px 4px 8px var(--sombra-escura), inset -4px -4px 8px var(--sombra-clara);
+  }
+  .nav-item-active .nav-icon { fill: var(--cor-texto-ativo); }
+  .nav-item-active .nav-text { color: var(--cor-texto-ativo); }
+  .nav-icon { width: 24px; height: 24px; margin-bottom: 0.2rem; fill: currentColor; }
+  .nav-text { font-size: 0.75rem; }
+  /* TELAS */
+  .profile-container {
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: center;
+    padding-top: 2rem;
+  }
+  .profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 1rem;
+    box-shadow: -5px -5px 10px var(--sombra-clara), 5px 5px 10px var(--sombra-escura);
+  }
+  .profile-info {
+    padding: 1rem;
+    border-radius: 16px;
+    background: var(--cor-menu);
+    margin-bottom: 1rem;
+    box-shadow: inset 4px 4px 8px var(--sombra-escura), inset -4px -4px 8px var(--sombra-clara);
+    text-align: left;
+  }
+  .profile-info h3 { margin: 0.5rem 0; }
+  .profile-info .info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #333;
+  }
+  .profile-info .info-row:last-child { border-bottom: none; }
+  .profile-interests {
+    padding: 1rem;
+    background: var(--cor-menu);
+    border-radius: 16px;
+    box-shadow: inset 4px 4px 8px var(--sombra-escura), inset -4px -4px 8px var(--sombra-clara);
+    text-align: left;
+    margin-bottom: 1rem;
+  }
+  .interest-tag {
+    display: inline-block;
+    background: var(--cor-fundo);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    margin: 0.25rem;
+    box-shadow: -3px -3px 6px var(--sombra-clara), 3px 3px 6px var(--sombra-escura);
+  }
+  /* LISTA PRÓXIMOS */
+  .list-item {
+    display: flex;
+    align-items: center;
+    background: var(--cor-menu);
+    border-radius: 12px;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    box-shadow: -3px -3px 6px var(--sombra-clara), 3px 3px 6px var(--sombra-escura);
+  }
+  .list-item img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-right: 1rem;
+    object-fit: cover;
+  }
+  /* FEED CAMINHOS */
+  .crossing-feed {
+    padding: 1rem;
+    background: var(--cor-menu);
+    border-radius: 12px;
+    margin-bottom: 0.5rem;
+    box-shadow: inset 3px 3px 6px var(--sombra-escura), inset -3px -3px 6px var(--sombra-clara);
+  }
+</style>
