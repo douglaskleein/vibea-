@@ -295,6 +295,7 @@
     padding: 0.75rem;
     margin-bottom: 0.5rem;
     box-shadow: -3px -3px 6px var(--sombra-clara), 3px 3px 6px var(--sombra-escura);
+    width: 100%;
   }
   .list-item img {
     width: 60px;
@@ -348,39 +349,13 @@
     <div id="swipe-area">
       <div class="swipe-status like">💚</div>
       <div class="swipe-status dislike">❌</div>
-      <div class="profile-card">
-        <img src="https://via.placeholder.com/400/7C5CFC/FFFFFF?text=Maria,25" alt="Foto do perfil">
-        <div class="profile-info-display">
-          <h3>Maria, 25</h3>
-          <p>Artista e amante de gatos. A 1km de distância.</p>
-        </div>
-      </div>
-      <div class="profile-card">
-        <img src="https://via.placeholder.com/400/7C5CFC/FFFFFF?text=Joao,28" alt="Foto do perfil">
-        <div class="profile-info-display">
-          <h3>João, 28</h3>
-          <p>Engenheiro e surfista. A 2km de distância.</p>
-        </div>
-      </div>
     </div>
   </div>
 
   <div id="proximos" class="screen">
     <h2>Próximos</h2>
-    <div class="list-item">
-      <img src="https://via.placeholder.com/60/7C5CFC/FFFFFF?text=Ana" alt="User">
-      <div>
-        <h3>Ana, 27</h3>
-        <p>A 500m de distância</p>
+    <div id="nearby-profiles-container">
       </div>
-    </div>
-    <div class="list-item">
-      <img src="https://via.placeholder.com/60/7C5CFC/FFFFFF?text=Carlos" alt="User">
-      <div>
-        <h3>Carlos, 30</h3>
-        <p>A 1km de distância</p>
-      </div>
-    </div>
   </div>
 
   <div id="caminhos" class="screen">
@@ -473,14 +448,18 @@
         }
       }
 
-      // NOVO: Carregar o perfil do usuário quando a tela de perfil for mostrada
       if (screenId === 'perfil') {
         loadUserProfile();
+      }
+      if (screenId === 'deslizar') {
+        loadSwipeCards();
+      }
+      if (screenId === 'proximos') {
+        loadNearbyProfiles();
       }
     }
     showScreen('login');
 
-    // Funções de Autenticação do Firebase
     function checkUserProfile() {
       const user = auth.currentUser;
       if (user) {
@@ -537,7 +516,6 @@
         });
     }
 
-    // Login com Google
     function handleGoogleLogin() {
       const provider = new firebase.auth.GoogleAuthProvider();
       auth.signInWithPopup(provider)
@@ -549,7 +527,6 @@
         });
     }
 
-    // Login com Apple
     function handleAppleLogin() {
       const provider = new firebase.auth.OAuthProvider('apple.com');
       auth.signInWithPopup(provider)
@@ -561,7 +538,6 @@
         });
     }
 
-    // Salvar Perfil do Usuário no Firestore
     function saveUserProfile() {
       const user = auth.currentUser;
       const name = document.getElementById('profile-name-input').value;
@@ -590,7 +566,6 @@
       });
     }
 
-    // NOVO: Carregar Perfil do Usuário do Firestore
     function loadUserProfile() {
       const user = auth.currentUser;
       if (user) {
@@ -610,10 +585,94 @@
       }
     }
 
+    async function loadSwipeCards() {
+      const swipeArea = document.getElementById('swipe-area');
+      const currentUser = auth.currentUser;
+
+      swipeArea.innerHTML = '';
+      const likeStatus = document.createElement('div');
+      likeStatus.className = 'swipe-status like';
+      likeStatus.innerText = '💚';
+      const dislikeStatus = document.createElement('div');
+      dislikeStatus.className = 'swipe-status dislike';
+      dislikeStatus.innerText = '❌';
+      swipeArea.appendChild(likeStatus);
+      swipeArea.appendChild(dislikeStatus);
+      
+      try {
+        const usersRef = db.collection('users');
+        const snapshot = await usersRef.get();
+        const profiles = [];
+
+        snapshot.forEach(doc => {
+          if (doc.id !== currentUser.uid) {
+            profiles.push({ id: doc.id, ...doc.data() });
+          }
+        });
+
+        profiles.forEach(profile => {
+          const card = document.createElement('div');
+          card.className = 'profile-card';
+          card.innerHTML = `
+            <img src="${profile.photoUrl}" alt="Foto de perfil de ${profile.name}">
+            <div class="profile-info-display">
+              <h3>${profile.name}, ${profile.age}</h3>
+              <p>${profile.bio}</p>
+            </div>
+          `;
+          swipeArea.appendChild(card);
+        });
+
+        const topCard = swipeArea.lastElementChild;
+        if (topCard) {
+          addDragEvents(topCard);
+        }
+
+      } catch (error) {
+        console.error("Erro ao carregar os perfis para a tela de deslize:", error);
+      }
+    }
+
+    // NOVA FUNÇÃO: Carregar lista de perfis para a tela de próximos
+    async function loadNearbyProfiles() {
+      const container = document.getElementById('nearby-profiles-container');
+      const currentUser = auth.currentUser;
+      container.innerHTML = ''; // Limpa os itens antigos
+
+      try {
+        const usersRef = db.collection('users');
+        const snapshot = await usersRef.get();
+        const profiles = [];
+
+        snapshot.forEach(doc => {
+          if (doc.id !== currentUser.uid) {
+            profiles.push({ id: doc.id, ...doc.data() });
+          }
+        });
+
+        if (profiles.length === 0) {
+          container.innerHTML = `<p style="text-align: center; margin-top: 2rem;">Nenhum usuário encontrado por perto.</p>`;
+          return;
+        }
+
+        profiles.forEach(profile => {
+          const listItem = document.createElement('div');
+          listItem.className = 'list-item';
+          listItem.innerHTML = `
+            <img src="${profile.photoUrl}" alt="User">
+            <div>
+              <h3>${profile.name}, ${profile.age}</h3>
+              <p>${profile.bio}</p>
+            </div>
+          `;
+          container.appendChild(listItem);
+        });
+      } catch (error) {
+        console.error("Erro ao carregar perfis próximos:", error);
+      }
+    }
+
     const swipeArea = document.getElementById('swipe-area');
-    const likeStatus = document.querySelector('.swipe-status.like');
-    const dislikeStatus = document.querySelector('.swipe-status.dislike');
-    let topCard = swipeArea ? swipeArea.lastElementChild : null;
     let isDragging = false;
     let startX;
     let currentX;
@@ -629,21 +688,23 @@
       card.addEventListener('mouseleave', endDrag);
     }
 
-    if (topCard) {
-      addDragEvents(topCard);
-    }
-
     function startDrag(e) {
       isDragging = true;
       startX = e.clientX || e.touches[0].clientX;
+      const topCard = swipeArea.lastElementChild;
       if (topCard) topCard.style.transition = '';
     }
 
     function drag(e) {
-      if (!isDragging || !topCard) return;
+      if (!isDragging) return;
+      const topCard = swipeArea.lastElementChild;
+      if (!topCard) return;
+      
       currentX = e.clientX || e.touches[0].clientX;
       const dx = currentX - startX;
       topCard.style.transform = `translateX(${dx}px) rotate(${dx / 20}deg)`;
+      const likeStatus = document.querySelector('.swipe-status.like');
+      const dislikeStatus = document.querySelector('.swipe-status.dislike');
       if (dx > 50) {
         likeStatus.style.opacity = 1;
         dislikeStatus.style.opacity = 0;
@@ -657,21 +718,24 @@
     }
 
     function endDrag(e) {
-      if (!isDragging || !topCard) return;
+      if (!isDragging) return;
       isDragging = false;
+      const topCard = swipeArea.lastElementChild;
+      if (!topCard) return;
+      
       const dx = currentX - startX;
       const threshold = 100;
-      if(topCard) topCard.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
-      likeStatus.style.opacity = 0;
-      dislikeStatus.style.opacity = 0;
+      topCard.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+      document.querySelector('.swipe-status.like').style.opacity = 0;
+      document.querySelector('.swipe-status.dislike').style.opacity = 0;
       if (Math.abs(dx) > threshold) {
         topCard.style.transform = `translateX(${dx > 0 ? 1000 : -1000}px) rotate(${dx > 0 ? 45 : -45}deg)`;
         topCard.style.opacity = '0';
         setTimeout(() => {
           topCard.remove();
-          topCard = swipeArea.lastElementChild;
-          if (topCard) {
-            addDragEvents(topCard);
+          const newTopCard = swipeArea.lastElementChild;
+          if (newTopCard && !newTopCard.classList.contains('swipe-status')) {
+            addDragEvents(newTopCard);
           } else {
             console.log("Todos os cartões foram deslizados!");
           }
