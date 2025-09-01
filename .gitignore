@@ -67,3 +67,7 @@ node_modules/
 
 # dataconnect generated files
 .dataconnect
+vibea-f902f-46cb0d8a1c5f.json
+Git-2.51.0-64-bit.exe
+git add .
+git commit -m "feat: Versão inicial do aplicativo"

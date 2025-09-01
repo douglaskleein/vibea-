@@ -4,13 +4,11 @@
     "ignore": [
       "firebase.json",
       "**/.*",
-      "**/node_modules/**"
-    ],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
+      "**/node_modules/**",
+      "**.exe",
+      "**.zip",
+      "**.docx",
+      "**.pdf"
     ]
   }
 }
