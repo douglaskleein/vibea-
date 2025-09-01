@@ -216,7 +216,8 @@
     box-shadow: inset 4px 4px 8px var(--sombra-escura), inset -4px -4px 8px var(--sombra-clara);
   }
   .nav-item-active .nav-icon {
-    filter: invert(50%) sepia(100%) saturate(2000%) hue-rotate(330deg) brightness(100%) contrast(100%); /* Efeito para cor-texto-ativo */
+    /* Filtro para mudar a cor do ícone para a cor de texto ativa */
+    filter: invert(50%) sepia(100%) saturate(2000%) hue-rotate(330deg) brightness(100%) contrast(100%);
   }
   .nav-item-active .nav-text {
     color: var(--cor-texto-ativo);
@@ -408,7 +409,6 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
   <script>
-    // Inicialização do Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyANLlI4HsYSrJj9JVFxVoJbG2VoPvaPOL0",
       authDomain: "vibea-f902f.firebaseapp.com",
@@ -420,7 +420,6 @@
     };
     const app = firebase.initializeApp(firebaseConfig);
     
-    // Variáveis globais
     const screens = document.querySelectorAll('.screen');
     const bottomNav = document.querySelector('.bottom-nav');
 
@@ -446,7 +445,6 @@
         }
       }
     }
-
     showScreen('login');
 
     const swipeArea = document.getElementById('swipe-area');
@@ -459,7 +457,6 @@
 
     function addDragEvents(card) {
       if (!card || card.classList.contains('swipe-status')) return;
-
       card.addEventListener('mousedown', startDrag);
       card.addEventListener('touchstart', startDrag, { passive: true });
       card.addEventListener('mousemove', drag);
@@ -484,7 +481,6 @@
       currentX = e.clientX || e.touches[0].clientX;
       const dx = currentX - startX;
       topCard.style.transform = `translateX(${dx}px) rotate(${dx / 20}deg)`;
-
       if (dx > 50) {
         likeStatus.style.opacity = 1;
         dislikeStatus.style.opacity = 0;
@@ -521,7 +517,6 @@
         topCard.style.transform = 'translateX(0px) rotate(0deg)';
       }
     }
-
   </script>
 </body>
 </html>
