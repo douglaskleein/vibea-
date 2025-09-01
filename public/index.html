@@ -1,3 +1,9 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vibea+ - Aplicativo Mobile</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   :root {
@@ -43,17 +49,17 @@
     text-align: center;
     box-shadow: -5px -5px 10px var(--sombra-clara), 5px 5px 10px var(--sombra-escura);
   }
-  /* Adicionado/Modificado para campos de input dentro do card */
+  /* Estilos para os inputs e botões dentro do card de login */
   .card input[type="email"],
   .card input[type="password"] {
-    display: block; /* Para que cada input fique em uma linha */
+    display: block;
     width: 100%;
     padding: 0.75rem;
     margin-bottom: 1rem;
     border-radius: 12px;
     border: none;
     font-size: 1rem;
-    background: var(--cor-fundo); /* Fundo dos inputs */
+    background: var(--cor-fundo);
     color: var(--cor-texto);
     text-align: left;
     box-shadow: inset 2px 2px 5px var(--sombra-escura), inset -2px -2px 5px var(--sombra-clara);
@@ -226,3 +232,84 @@
     box-shadow: inset 3px 3px 6px var(--sombra-escura), inset -3px -3px 6px var(--sombra-clara);
   }
 </style>
+</head>
+<body>
+  <div id="login" class="screen active">
+    <div class="login-title">Vibea+</div>
+    <p>Onde seus caminhos se cruzam com as pessoas certas</p>
+    <div class="card">
+      <h2>Login / Cadastro</h2>
+      <input type="email" id="email-input" placeholder="Seu e-mail" class="btn" style="text-align: left; padding: 1rem;" />
+      <input type="password" id="password-input" placeholder="Sua senha" class="btn" style="text-align: left; padding: 1rem;" />
+      <button class="btn btn-primary" onclick="showScreen('deslizar')">Entrar</button>
+      <button class="btn" onclick="showScreen('deslizar')" style="background: #282828; color: #ccc;">Criar Conta</button>
+      <p style="font-size: 0.8rem; margin-top: 1rem;">Opcional: use os botões abaixo para login social</p>
+      <button class="btn btn-google" onclick="showScreen('deslizar')">Entrar com Google</button>
+      <button class="btn btn-apple" onclick="showScreen('deslizar')">Entrar com Apple</button>
+    </div>
+  </div>
+
+  <div id="deslizar" class="screen">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <h2>Modo Deslizar</h2>
+      <button class="btn" onclick="handleLogout()" style="width: auto; padding: 0.5rem 1rem; font-size: 0.9rem; margin-bottom: 0;">Sair</button>
+    </div>
+    <div id="swipe-area">
+      <div class="swipe-status like">💚</div>
+      <div class="swipe-status dislike">❌</div>
+      <div class="profile-card">
+        <img src="https://via.placeholder.com/400" alt="Foto do perfil">
+        <div class="profile-info">
+          <h3>Maria, 25</h3>
+          <p>Artista e amante de gatos. A 1km de distância.</p>
+        </div>
+      </div>
+      <div class="profile-card">
+        <img src="https://via.placeholder.com/400" alt="Foto do perfil">
+        <div class="profile-info">
+          <h3>João, 28</h3>
+          <p>Engenheiro e surfista. A 2km de distância.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="proximos" class="screen">
+    <h2>Próximos</h2>
+    <div class="list-item">
+      <img src="https://via.placeholder.com/60" alt="User">
+      <div>
+        <h3>Ana, 27</h3>
+        <p>A 500m de distância</p>
+      </div>
+    </div>
+    <div class="list-item">
+      <img src="https://via.placeholder.com/60" alt="User">
+      <div>
+        <h3>Carlos, 30</h3>
+        <p>A 1km de distância</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="caminhos" class="screen">
+    <h2>Caminhos</h2>
+    <div class="crossing-feed">Você cruzou com Maria (há 15min)</div>
+    <div class="crossing-feed">Você cruzou com Pedro (há 1h)</div>
+  </div>
+
+  <div id="chat" class="screen">
+    <h2>Chat</h2>
+    <p>Aqui você verá suas mensagens.</p>
+  </div>
+
+  <div id="perfil" class="screen">
+    <h2>Perfil</h2>
+    <p>Informações do usuário e configurações.</p>
+  </div>
+
+  <div class="bottom-nav">
+    <button onclick="showScreen('deslizar')">Deslizar</button>
+    <button onclick="showScreen('proximos')">Próximos</button>
+    <button onclick="showScreen('caminhos')">Caminhos</button>
+    <button onclick="showScreen
