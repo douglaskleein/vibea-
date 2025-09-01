@@ -314,11 +314,11 @@
       <h2>Login / Cadastro</h2>
       <input type="email" id="email-input" placeholder="Seu e-mail" />
       <input type="password" id="password-input" placeholder="Sua senha" />
-      <button class="btn btn-primary" id="login-btn" onclick="showScreen('deslizar')">Entrar</button>
-      <button class="btn btn-signup" id="signup-btn" onclick="showScreen('deslizar')">Criar Conta</button>
+      <button class="btn btn-primary" id="login-btn" onclick="handleLogin()">Entrar</button>
+      <button class="btn btn-signup" id="signup-btn" onclick="handleSignup()">Criar Conta</button>
       <p style="font-size: 0.8rem; margin-top: 1rem;">Opcional: use os botões abaixo para login social</p>
-      <button class="btn btn-google" onclick="showScreen('deslizar')">Entrar com Google</button>
-      <button class="btn btn-apple" onclick="showScreen('deslizar')">Entrar com Apple</button>
+      <button class="btn btn-google" onclick="handleGoogleLogin()">Entrar com Google</button>
+      <button class="btn btn-apple" onclick="handleAppleLogin()">Entrar com Apple</button>
     </div>
   </div>
 
@@ -419,9 +419,12 @@
       measurementId: "G-KBD60NQJDW"
     };
     const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
     
     const screens = document.querySelectorAll('.screen');
     const bottomNav = document.querySelector('.bottom-nav');
+    const emailInput = document.getElementById('email-input');
+    const passwordInput = document.getElementById('password-input');
 
     function showScreen(screenId) {
       screens.forEach(screen => {
@@ -446,6 +449,76 @@
       }
     }
     showScreen('login');
+
+    // Funções de Autenticação do Firebase
+    function handleSignup() {
+      const email = emailInput.value;
+      const password = passwordInput.value;
+      
+      auth.createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          // Usuário criado com sucesso
+          alert("Conta criada com sucesso!");
+          showScreen('deslizar');
+        })
+        .catch((error) => {
+          let errorMessage = "Ocorreu um erro. Tente novamente.";
+          if (error.code === 'auth/email-already-in-use') {
+            errorMessage = "O e-mail fornecido já está em uso.";
+          } else if (error.code === 'auth/invalid-email') {
+            errorMessage = "O e-mail fornecido é inválido.";
+          } else if (error.code === 'auth/weak-password') {
+            errorMessage = "A senha deve ter pelo menos 6 caracteres.";
+          }
+          alert(errorMessage);
+        });
+    }
+
+    function handleLogin() {
+      const email = emailInput.value;
+      const password = passwordInput.value;
+
+      auth.signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          // Login bem-sucedido
+          alert("Login bem-sucedido!");
+          showScreen('deslizar');
+        })
+        .catch((error) => {
+          let errorMessage = "Ocorreu um erro. Verifique seu e-mail e senha.";
+          if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
+            errorMessage = "Credenciais inválidas. Verifique seu e-mail e senha.";
+          }
+          alert(errorMessage);
+        });
+    }
+
+    // Login com Google
+    function handleGoogleLogin() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      auth.signInWithPopup(provider)
+        .then((result) => {
+          alert("Login com Google bem-sucedido!");
+          showScreen('deslizar');
+        }).catch((error) => {
+          console.error("Erro no login com Google:", error);
+          alert("Erro ao fazer login com Google. Tente novamente.");
+        });
+    }
+
+    // Login com Apple
+    function handleAppleLogin() {
+      const provider = new firebase.auth.OAuthProvider('apple.com');
+      auth.signInWithPopup(provider)
+        .then((result) => {
+          alert("Login com Apple bem-sucedido!");
+          showScreen('deslizar');
+        }).catch((error) => {
+          console.error("Erro no login com Apple:", error);
+          alert("Erro ao fazer login com Apple. Tente novamente.");
+        });
+    }
+
 
     const swipeArea = document.getElementById('swipe-area');
     const likeStatus = document.querySelector('.swipe-status.like');
