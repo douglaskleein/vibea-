@@ -332,10 +332,10 @@
     <div class="login-title">Complete seu Perfil</div>
     <div class="card">
       <p>Preencha suas informações para começar.</p>
-      <input type="text" id="profile-name" placeholder="Seu nome" required />
-      <input type="number" id="profile-age" placeholder="Sua idade" required />
-      <input type="text" id="profile-bio" placeholder="Fale um pouco sobre você" required />
-      <input type="text" id="profile-photo-url" placeholder="URL da sua foto (ex: link de uma imagem)" required />
+      <input type="text" id="profile-name-input" placeholder="Seu nome" required />
+      <input type="number" id="profile-age-input" placeholder="Sua idade" required />
+      <input type="text" id="profile-bio-input" placeholder="Fale um pouco sobre você" required />
+      <input type="text" id="profile-photo-url-input" placeholder="URL da sua foto (ex: link de uma imagem)" required />
       <button class="btn btn-primary" onclick="saveUserProfile()">Salvar Perfil</button>
     </div>
   </div>
@@ -395,8 +395,14 @@
   </div>
 
   <div id="perfil" class="screen">
-    <h2>Perfil</h2>
-    <p>Informações do usuário e configurações.</p>
+    <div class="profile-container">
+      <img id="my-profile-photo" class="profile-avatar" src="https://via.placeholder.com/120" alt="Sua foto de perfil">
+      <div class="profile-info-display">
+        <h3><span id="my-profile-name">Nome</span>, <span id="my-profile-age">Idade</span></h3>
+        <p><span id="my-profile-bio">Sua biografia será exibida aqui.</span></p>
+      </div>
+      <button class="btn" onclick="showScreen('login')">Sair</button>
+    </div>
   </div>
 
   <div class="bottom-nav">
@@ -465,6 +471,11 @@
         if (activeButton) {
           activeButton.classList.add('nav-item-active');
         }
+      }
+
+      // NOVO: Carregar o perfil do usuário quando a tela de perfil for mostrada
+      if (screenId === 'perfil') {
+        loadUserProfile();
       }
     }
     showScreen('login');
@@ -553,10 +564,10 @@
     // Salvar Perfil do Usuário no Firestore
     function saveUserProfile() {
       const user = auth.currentUser;
-      const name = document.getElementById('profile-name').value;
-      const age = document.getElementById('profile-age').value;
-      const bio = document.getElementById('profile-bio').value;
-      const photoUrl = document.getElementById('profile-photo-url').value;
+      const name = document.getElementById('profile-name-input').value;
+      const age = document.getElementById('profile-age-input').value;
+      const bio = document.getElementById('profile-bio-input').value;
+      const photoUrl = document.getElementById('profile-photo-url-input').value;
 
       if (!name || !age || !bio || !photoUrl) {
         alert("Por favor, preencha todos os campos.");
@@ -577,6 +588,26 @@
         console.error("Erro ao salvar o perfil:", error);
         alert("Erro ao salvar o perfil. Tente novamente.");
       });
+    }
+
+    // NOVO: Carregar Perfil do Usuário do Firestore
+    function loadUserProfile() {
+      const user = auth.currentUser;
+      if (user) {
+        db.collection('users').doc(user.uid).get().then(doc => {
+          if (doc.exists) {
+            const data = doc.data();
+            document.getElementById('my-profile-name').innerText = data.name;
+            document.getElementById('my-profile-age').innerText = data.age;
+            document.getElementById('my-profile-bio').innerText = data.bio;
+            document.getElementById('my-profile-photo').src = data.photoUrl;
+          } else {
+            console.log("Nenhum documento encontrado para o usuário.");
+          }
+        }).catch(error => {
+          console.error("Erro ao carregar o perfil:", error);
+        });
+      }
     }
 
     const swipeArea = document.getElementById('swipe-area');
